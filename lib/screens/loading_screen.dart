@@ -121,7 +121,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
           context,
           (_user != null)
               ? MaterialPageRoute(builder: (context) => HomeScreen())
-              : MaterialPageRoute(builder: (context) => LoginScreen()));
+              : MaterialPageRoute(
+                  builder: (context) => LoginScreen(
+                        loggedOut: false,
+                      )));
     });
   }
 }

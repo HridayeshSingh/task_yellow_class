@@ -10,13 +10,16 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:task_yellow_class/constants.dart';
 import 'package:task_yellow_class/models/movies_model.dart';
 import 'package:task_yellow_class/screens/home_screen.dart';
+import 'package:task_yellow_class/screens/signup_screen.dart';
 import 'package:task_yellow_class/widgets/custom_button.dart';
 import 'package:task_yellow_class/widgets/custom_text_field.dart';
 import 'package:task_yellow_class/models/user_model.dart' as UserModel;
 
-import '../routes.dart';
-
 class LoginScreen extends StatefulWidget {
+  LoginScreen({@required this.loggedOut});
+
+  final bool loggedOut;
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -27,6 +30,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool showSpinner = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    if (widget.loggedOut) {
+      Hive.box<UserModel.User>(kHiveUsersBoxName).close();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,8 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontWeight: FontWeight.w600,
                                 decoration: TextDecoration.underline),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.pushReplacement(context,
-                                  SlideRoute(routeName: RouteNames.SIGNUP)),
+                              ..onTap = () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignupScreen(
+                                            loggedOut: widget.loggedOut,
+                                          ))),
                           ),
                         ],
                       ),

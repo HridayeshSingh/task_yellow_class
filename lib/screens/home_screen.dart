@@ -35,8 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
 
-    Hive.box<UserModel.User>(kHiveUsersBoxName).close();
-    Hive.box<Movies>(_auth.currentUser.uid).close();
+    if (_auth.currentUser != null) {
+      Hive.box<UserModel.User>(kHiveUsersBoxName).close();
+      Hive.box<Movies>(_auth.currentUser.uid).close();
+    }
   }
 
   @override
@@ -138,14 +140,21 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Log Out',
               onTap: () async {
                 User user = _auth.currentUser;
+                String uid = user.uid;
 
                 if (user.providerData[0].providerId == 'google.com')
                   await _googleSignIn.disconnect();
 
                 await _auth.signOut();
 
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                Hive.box<Movies>(uid).close();
+
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginScreen(
+                              loggedOut: true,
+                            )));
               },
             ),
           ],
