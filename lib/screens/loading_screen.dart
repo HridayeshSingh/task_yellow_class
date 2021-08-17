@@ -112,6 +112,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
       _user = _auth.currentUser;
     });
 
+    if (_user != null) {
+      await Hive.openBox<Movies>(_user.uid);
+    }
+
     Timer(Duration(seconds: 2), () {
       Navigator.pushReplacement(
           context,

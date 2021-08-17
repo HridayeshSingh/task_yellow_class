@@ -196,8 +196,8 @@ class _AddEditScreenState extends State<AddEditScreen> {
   }
 
   void _editButtonClicked() async {
-    FilePickerResult result = await FilePicker.platform
-        .pickFiles(allowedExtensions: ['jpg', 'jpeg', 'png']);
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
     if (result != null) {
       setState(() {
         coverPic = result.files.single.path;

@@ -31,12 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _initializePage();
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //
-  //   Hive.box<Movies>(_auth.currentUser.uid).close();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+
+    Hive.box<UserModel.User>(kHiveUsersBoxName).close();
+    Hive.box<Movies>(_auth.currentUser.uid).close();
+  }
 
   @override
   Widget build(BuildContext context) {
