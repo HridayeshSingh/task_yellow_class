@@ -14,11 +14,9 @@ import 'package:task_yellow_class/widgets/custom_text_field.dart';
 import 'package:task_yellow_class/models/user_model.dart' as UserModel;
 
 import '../constants.dart';
+import '../routes.dart';
 
 class SignupScreen extends StatefulWidget {
-  SignupScreen({@required this.loggedOut});
-
-  final bool loggedOut;
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -34,12 +32,13 @@ class _SignupScreenState extends State<SignupScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool showSpinner = false;
+  bool isPushed = false;
 
   @override
   void dispose() {
     super.dispose();
 
-    if (widget.loggedOut) {
+    if (!isPushed) {
       Hive.box<UserModel.User>(kHiveUsersBoxName).close();
     }
   }
@@ -204,12 +203,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w600,
                                 decoration: TextDecoration.underline),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignupScreen(
-                                            loggedOut: widget.loggedOut,
-                                          ))),
+                              ..onTap = () {
+                                setState(() {
+                                  isPushed = true;
+                                });
+                                Navigator.pushReplacement(context,
+                                    SlideRoute(routeName: RouteNames.LOGIN));
+                              },
                           ),
                         ],
                       ),
@@ -271,6 +271,10 @@ class _SignupScreenState extends State<SignupScreen> {
               email: _emailController.text, name: _nameController.text),
         );
 
+        setState(() {
+          isPushed = true;
+        });
+
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       }
@@ -324,6 +328,10 @@ class _SignupScreenState extends State<SignupScreen> {
           name: name,
         ),
       );
+
+      setState(() {
+        isPushed = true;
+      });
 
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));

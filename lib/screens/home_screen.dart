@@ -149,12 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 Hive.box<Movies>(uid).close();
 
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginScreen(
-                              loggedOut: true,
-                            )));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
             ),
           ],
